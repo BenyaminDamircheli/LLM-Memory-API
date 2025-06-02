@@ -11,6 +11,7 @@ class BaseEmbeddingConfig(ABC):
         self,
         model: Optional[str] = None,
         api_key: Optional[str] = None,
+        embedding_dims: Optional[int] = None,
     ):
         """
         Initialize the embedding config
@@ -21,4 +22,4 @@ class BaseEmbeddingConfig(ABC):
         """
         self.model = model
         self.api_key = api_key
-    
+        self.embedding_dims = embedding_dims
