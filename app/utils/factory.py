@@ -16,12 +16,18 @@ class EmbeddingFactory:
     }
 
     @classmethod
-    def create(cls, provider_name:str, config, vector_config: Optional[dict]):
-        class_type = cls.provider_to_class[provider_name]
-        if class_type:
-            embedding_class = load_class(class_type)
-            base_config = BaseEmbeddingConfig(**config)
-            return embedding_class(base_config)
-        else:
+    def create(cls, provider_name: str, config, vector_config: Optional[dict]):
+        class_type = cls.provider_to_class.get(provider_name)
+        if not class_type:
             raise ValueError(f"Invalid provider: {provider_name}")
+
+        embedding_class = load_class(class_type)
+        base_config = BaseEmbeddingConfig(**config)
+
+        # Pass the expected keyword arguments to the embedding model instead of
+        # the configuration object itself.
+        return embedding_class(
+            api_key=base_config.api_key,
+            model=base_config.model,
+        )
 
